@@ -1,7 +1,5 @@
 import numpy as np
-import matplotlib.pyplot as plt
 import cv2 as cv
-import heapq as hq
 from queue import PriorityQueue
 
 boundry = []
@@ -9,12 +7,12 @@ Pth = {}
 queue = PriorityQueue()
 b_track = []
 CheckedList = []
-
+#Creating the Obstacle Space
 def obstacle_space(space):
     h,w,_ = space.shape
     for l in range(h):
         for m in range(w):
-            if ((250-l) - 3 < 0) or ((m) - 3 < 0) or ((250-l) - 247 > 0) or ((m) - 597 > 0): #boundary
+            if ((250-l) - 5 < 0) or ((m) - 5 < 0) or ((250-l) - 245 > 0) or ((m) - 595 > 0): #boundary
                 space[l][m] = [0,0,255]
                 boundry.append((m,250-l))
             if (m > 95) and (m < 155) and (250-l < 105) and (250-l >2):
@@ -45,7 +43,7 @@ def obstacle_space(space):
 
 
 
-
+#Getting User Inputs For the Start node from the user
 def User_Inputs_Start(Obs_Coords):
     while True:
         x = int(input("Enter the Initial x node: "))
@@ -57,6 +55,7 @@ def User_Inputs_Start(Obs_Coords):
                 return start_node
             else:
                 print("The Entered Start Node is in obstacle space")
+#Getting User Input for the Goal Node from the user
 def User_Inputs_Goal(Obs_Coords):
     while True:
         x = int(input("Enter the Goal x node: "))
@@ -69,7 +68,7 @@ def User_Inputs_Goal(Obs_Coords):
             else:
                 print("The Entered Goal Node is in obstacle space")
     return goal_node
-
+#Up funtion for the dijkstra Algorithm
 def Up_function(a,CheckedList,Obs_Coords):
     pos = a[1]
     newPos = (pos[0],pos[1]+1)
@@ -85,7 +84,7 @@ def Up_function(a,CheckedList,Obs_Coords):
                     return
         queue.put((Cost,newPos))
         Pth[newPos] = pos 
-
+#Down function for the dijkstra Algorithm
 def Down_function(a,CheckedList,Obs_Coords):
     pos = a[1]
     newPos = (pos[0],pos[1]-1)
@@ -101,7 +100,7 @@ def Down_function(a,CheckedList,Obs_Coords):
                     return
         queue.put((Cost,newPos))
         Pth[newPos] = pos 
-
+#Left function for the dijkstra Algorithm
 def Left_function(a,CheckedList,Obs_Coords):
     pos = a[1]
     newPos = (pos[0]-1,pos[1])
@@ -117,7 +116,7 @@ def Left_function(a,CheckedList,Obs_Coords):
                     return
         queue.put((Cost,newPos))
         Pth[newPos] = pos 
-
+#Right function for the dijkstra AAlgorithm
 def Right_function(a,CheckedList,Obs_Coords):
     pos = a[1]
     newPos = (pos[0]+1,pos[1])
@@ -134,6 +133,7 @@ def Right_function(a,CheckedList,Obs_Coords):
         queue.put((Cost,newPos))
         Pth[newPos] = pos 
 
+#UpLeft function for the dijkstra algorithm
 def UpLeft_function(a,CheckedList,Obs_Coords):
     pos = a[1]
     newPos = (pos[0]-1,pos[1]+1)
@@ -149,7 +149,7 @@ def UpLeft_function(a,CheckedList,Obs_Coords):
                     return
         queue.put((Cost,newPos))
         Pth[newPos] = pos 
-
+#Dijkstra func for Upright function
 def UpRight_function(a,CheckedList,Obs_Coords):
     pos = a[1]
     newPos = (pos[0]+1,pos[1]+1)
@@ -198,7 +198,7 @@ def DownRight_function(a,CheckedList,Obs_Coords):
         queue.put((Cost,newPos))
         Pth[newPos] = pos 
 
-
+#Defining the bactracking algorithm 
 def B_tracking(Pth, initial_pt, goal_pt):
     b_track = []
     K = Pth.get(goal_pt)
@@ -220,10 +220,10 @@ Obs_Coords= obstacle_space(space)           #Creating the obstacle boundries
 #     if val == (101,70):
 #         print("the val is present in obstacle", val)
 
-initial_pt = User_Inputs_Start(Obs_Coords)
+initial_pt = User_Inputs_Start(Obs_Coords)  
 goal_pt = User_Inputs_Goal(Obs_Coords)
 start = (0,initial_pt)
-queue.put(start)
+queue.put(start)        
 while True:
     a = queue.get()
     CheckedList.append(a[1])
@@ -257,15 +257,11 @@ for i in CheckedList:
     cv.imshow("SPACE", space )
     if cv.waitKey(1) & 0xFF == ord('q'):
           break
-    # cv.imwrite("output.jpg", space)
+    
     
 for j in b:
     space[250-j[1]][j[0]] = [0,255,0]
     cv.imshow("SPACE", space )
     if cv.waitKey(10) & 0xFF == ord('q'):
           break
-
-    
-
-
 cv.destroyAllWindows()
