@@ -254,46 +254,18 @@ print(b)
 
 for i in CheckedList:
     space[250-i[1]][i[0]] = [255,0,0]
-    cv.imwrite("output.jpg", space)
+    cv.imshow("SPACE", space )
+    if cv.waitKey(1) & 0xFF == ord('q'):
+          break
+    # cv.imwrite("output.jpg", space)
     
 for j in b:
     space[250-j[1]][j[0]] = [0,255,0]
-    
+    cv.imshow("SPACE", space )
+    if cv.waitKey(10) & 0xFF == ord('q'):
+          break
 
     
 
 
-# print(initial_pt)
-# print(goal_pt)
-# print(boundries)
-# print(shape)
-
-cv.imshow("obstacle space",space)
-cv.waitKey(0)
 cv.destroyAllWindows()
-# import cv2 as cv
-# import numpy as np
-
-# # initialize variables
-# space = np.zeros((500,500,3), dtype=np.uint8)
-# space.fill(255)
-
-# # define the path and obstacles
-# # ...
-
-# # create a video writer
-# fourcc = cv.VideoWriter_fourcc(*'mp4v')
-# out = cv.VideoWriter('output.mp4', fourcc, 30, (500, 500))
-
-# # loop over each step of the path and write each frame to the video
-# for i in CheckedList:
-#     space[250-i[1]][i[0]] = [255,0,0]
-#     out.write(space)
-
-# for j in b:
-#     space[250-j[1]][j[0]] = [0,255,0]
-#     out.write(space)
-
-# # release the video writer and destroy any remaining windows
-# out.release()
-# cv.destroyAllWindows()
